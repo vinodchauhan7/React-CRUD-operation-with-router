@@ -13,4 +13,16 @@
     margin: 5%;
     height: 400px;
     border: 2px solid grey;
+    text-align: center;
+}
+
+.signInBox {
+    font-display: inherit;
+    text-align: center;
+}
+
+.LogInButton {
+    padding: 5px;
+    background: blue;
+    color: white;
 }
