@@ -27,17 +27,17 @@ class LoginComponent extends Component {
     this.setState({ password });
   };
 
-  handleSubmit = event => {
-    alert(`${this.state.username} -- ${this.state.password}`);
-    event.preventDefault();
-  };
+  //   handleSubmit = event => {
+  //     alert(`${this.state.username} -- ${this.state.password}`);
+  //     event.preventDefault();
+  //   };
 
   render() {
     return (
       <div>
-        <h4>SignIn Page</h4>
+        <h6>SignIn Page</h6>
         <div className="signInBox">
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={event => this.props.onLogin(this.state, event)}>
             <label>UserName :: </label>
             <input
               type="text"
