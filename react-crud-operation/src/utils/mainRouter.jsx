@@ -8,6 +8,7 @@ import LoginComponent from "../components/LoginComponent";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import DashBoard from "../components/dashBoardComponent";
+import SignUpForm from "../components/signUpComponent";
 
 /**
  * This component will help us to route different urls which are supported by our app.
@@ -16,6 +17,7 @@ class MainRouter extends Component {
   state = {
     user: "",
     loggedIn: false,
+    fullData: null,
     message: "",
     userData: [
       {
@@ -30,7 +32,14 @@ class MainRouter extends Component {
         password: "nikhil",
         name: "Nikhil Jauhri",
         age: "28",
-        gender: "ignitesofthelp@gmail.com"
+        email: "ignitesofthelp@gmail.com"
+      },
+      {
+        username: "admin",
+        password: "admin",
+        name: "admin",
+        age: "34",
+        email: "adminhelp@gmail.com"
       }
     ]
   };
@@ -55,6 +64,9 @@ class MainRouter extends Component {
         //setUserName Value so that we can use it in other components
         this.setState({ user: userCred[0] });
         this.setState({ loggedIn: true });
+        if (userCred[0].username === "admin") {
+          this.setState({ fullData: this.state.userData });
+        }
         this.props.history.push("/dashboard");
       } //Matchin if Condition ends here
       else {
@@ -67,6 +79,31 @@ class MainRouter extends Component {
       });
     }
   }; //end of handleLoged in method
+
+  /**Sign up */
+  handleRegister = (registrationData, event) => {
+    event.preventDefault();
+    this.setState({ message: "" });
+    if (
+      registrationData.username === "" ||
+      registrationData.password === "" ||
+      registrationData.age === "" ||
+      registrationData.name === "" ||
+      registrationData.email === ""
+    ) {
+      this.setState({ message: "SignUp form is not complete." });
+    } //if ends here
+    let { userData } = this.state;
+    userData.push(registrationData);
+    this.setState({ userData });
+    this.setState({ message: "Successfully Registered." });
+    this.props.history.push("/");
+  };
+
+  handleLogout = () => {
+    this.setState({ loggedIn: false });
+    this.props.history.push("/");
+  };
 
   render() {
     console.log("Render works");
@@ -87,9 +124,7 @@ class MainRouter extends Component {
         <Route
           path="/signUp"
           exact
-          render={() => {
-            return <div>Let the user sign up Here</div>;
-          }}
+          component={() => <SignUpForm onRegister={this.handleRegister} />}
         />
 
         {/**
@@ -102,7 +137,11 @@ class MainRouter extends Component {
           exact
           component={() =>
             this.state.loggedIn ? (
-              <DashBoard userData={this.state.user} />
+              <DashBoard
+                userData={this.state.user}
+                loggedOut={this.handleLogout}
+                dbData={this.state.fullData}
+              />
             ) : (
               <Redirect to="/" />
             )

@@ -4,6 +4,7 @@
 
 import React, { Component } from "react";
 import "../App.css";
+import { Link } from "react-router-dom";
 
 /**
  * This Component basically creates a login form to log in into the app. We have used basic form
@@ -52,8 +53,13 @@ class LoginComponent extends Component {
               onChange={this.handlePassword}
             />
             <br />
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             <button className="LogInButton" type="submit">
               LogIn
+            </button>
+            &nbsp;
+            <button>
+              <Link to="/signUp">SignUp</Link>
             </button>
           </form>
         </div>
