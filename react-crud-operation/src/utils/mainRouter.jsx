@@ -44,6 +44,12 @@ class MainRouter extends Component {
     ]
   };
 
+  handleDelete = data => {
+    const userData = this.state.userData.filter(user => user !== data);
+    this.setState({ userData });
+    this.setState({ fullData: userData });
+  };
+
   /**
    * This method will handle LogIn activity by User.
    */
@@ -93,11 +99,31 @@ class MainRouter extends Component {
     ) {
       this.setState({ message: "SignUp form is not complete." });
     } //if ends here
-    let { userData } = this.state;
-    userData.push(registrationData);
-    this.setState({ userData });
-    this.setState({ message: "Successfully Registered." });
-    this.props.history.push("/");
+    let userData = [...this.state.userData];
+    let currentUser = userData.filter(
+      user => user.username === registrationData.username
+    );
+    console.log(currentUser);
+    if (currentUser) {
+      const index = userData.indexOf(currentUser[0]);
+      userData[index] = { ...registrationData };
+      console.log("104");
+      console.log(userData);
+    } else {
+      userData.push(registrationData);
+    }
+    console.log("userData 107  ::");
+    console.log(userData);
+
+    this.setState({ userData: userData });
+    if (currentUser) {
+      this.setState({ message: "Successfully Updated." });
+      this.setState({ fullData: userData });
+      this.props.history.goBack();
+    } else {
+      this.setState({ message: "Successfully Registered." });
+      this.props.history.push("/");
+    }
   };
 
   handleLogout = () => {
@@ -107,6 +133,7 @@ class MainRouter extends Component {
 
   render() {
     console.log("Render works");
+    console.log(`${this.state.userData[0].age}`);
     return (
       <div>
         <h3 className="warning">{this.state.message}</h3>
@@ -141,6 +168,7 @@ class MainRouter extends Component {
                 userData={this.state.user}
                 loggedOut={this.handleLogout}
                 dbData={this.state.fullData}
+                onDelete={this.handleDelete}
               />
             ) : (
               <Redirect to="/" />
