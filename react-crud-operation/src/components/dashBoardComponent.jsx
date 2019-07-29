@@ -1,9 +1,22 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 /**
  * This component will show the details of the user when logged in.
  */
 class DashBoard extends Component {
+  onUpdate = userData => {
+    this.props.history.push({
+      pathname: "/signUp",
+      state: { data: userData }
+    });
+  };
+
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+
   render() {
     const isAdmin = this.props.userData.username === "admin" ? true : false;
     return (
@@ -27,10 +40,22 @@ class DashBoard extends Component {
                   <th>{data.name}</th>
                   <th>{data.email}</th>
                   <th>
-                    <button>Update</button>
+                    {data.username === "admin" ? (
+                      ""
+                    ) : (
+                      <button onClick={() => this.onUpdate(data)}>
+                        Update
+                      </button>
+                    )}
                   </th>
                   <th>
-                    <button>Delete</button>
+                    {data.username === "admin" ? (
+                      ""
+                    ) : (
+                      <button onClick={() => this.props.onDelete(data)}>
+                        Delete
+                      </button>
+                    )}
                   </th>
                 </tr>
               ))}
@@ -61,4 +86,4 @@ class DashBoard extends Component {
   }
 }
 
-export default DashBoard;
+export default withRouter(DashBoard);
